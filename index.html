@@ -211,9 +211,6 @@ input,select,textarea{font-family:inherit;color:#e2e8f0}
   <div class="top-right">
     <span id="saved" class="saved">&#10003; Guardado</span>
     <span id="sync-st" style="font-size:10px;white-space:nowrap;color:#F59E0B">&#8635; Cargando...</span>
-    <button class="btn-action btn-share" onclick="exportHTML()" id="share-btn">
-      &#128228;<span class="btn-lbl"> Compartir</span>
-    </button>
     <button class="btn-action btn-pdf" onclick="exportPDF()" id="pdf-btn">
       &#11015;<span class="btn-lbl"> PDF</span>
     </button>
@@ -390,30 +387,6 @@ function toast(msg,type){
   setTimeout(()=>{t.className=""},2800);
 }
 
-// ── COMPARTIR: genera HTML con datos embebidos ─────────────────────────────────
-function exportHTML(){
-  const btn=document.getElementById("share-btn");
-  btn.innerHTML="\u23f3<span class='btn-lbl'> Generando...</span>";btn.style.opacity=".7";
-  setTimeout(()=>{
-    try{
-      const src=document.documentElement.outerHTML;
-      const dataStr=JSON.stringify(sp);
-      // Reemplazar el placeholder de datos con los datos actuales
-      const updated=src.replace(
-        /const INITIAL_DATA = (?:null|null|\{[\s\S]*?\});/,
-        "const INITIAL_DATA = "+dataStr+";"
-      );
-      const blob=new Blob([updated],{type:"text/html;charset=utf-8"});
-      const a=document.createElement("a");
-      const d=new Date();
-      a.href=URL.createObjectURL(blob);
-      a.download="MeetUp2026_"+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+".html";
-      a.click();URL.revokeObjectURL(a.href);
-      toast("\u2713 HTML listo para compartir");
-    }catch(e){toast("Error: "+e.message,"err")}
-    btn.innerHTML="\ud83d\udce4<span class='btn-lbl'> Compartir</span>";btn.style.opacity="1";
-  },100);
-}
 
 // ── STATS ─────────────────────────────────────────────────────────────────────
 function calcStats(){
